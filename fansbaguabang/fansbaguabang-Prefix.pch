@@ -1,0 +1,35 @@
+//
+// Prefix header for all source files of the 'fansbaguabang' target in the 'fansbaguabang' project
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_3_0
+#warning "This project uses features only available in iOS SDK 3.0 and later."
+#endif
+
+#ifdef __OBJC__
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+
+
+
+#define SinaWeiboAppKey         @"1883578695"
+#define SinaWeiboAppSecret      @"1f467c1596d636c89fbfca4672ac693c"
+#define SinaWeiboRedirectURI    @"http://baguabang.ifensi.com/plugin/wb_callback"
+
+#define API_URL_PREFIX @"http://baguabang.ifensi.com"
+#define API_URL_TOKEN @"/push/bind"
+#define API_URL_TUIJIAN @"/hot"
+#define API_URL_LIST @"/list"
+#define API_URL_JIZHE @"/newsman"
+#define API_URL_SHARECONTENT @"/article/share"
+#define API_URL_GETARTICLECOUNT @"/operation/selectNum"
+#define API_URL_DING @"/operation/ding"
+#define API_URL_CAI @"/operation/cai"
+
+
+#define APIMAKER(s) ([NSString stringWithFormat:@"%@%@?uuid=%@", API_URL_PREFIX, s, [[NSUserDefaults standardUserDefaults] objectForKey:@"deviceuserid"]])
+
+
+#endif
