@@ -121,12 +121,14 @@
 {
     UITableViewCell *cell;
     
-    cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell_%d", indexPath.row]];
-    
+ //   cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell_%d", indexPath.row]];
+  //解决缓存导致的数据问题..
+    cell = [tableView dequeueReusableCellWithIdentifier:[NSString stringWithFormat:@"cell_%d",[[[listdata objectAtIndex:indexPath.row] objectForKey:@"id"] intValue]]];
     
     if (cell == nil)
     {
-        cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[NSString stringWithFormat:@"cell_%d", indexPath.row]] autorelease];
+      //  cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[NSString stringWithFormat:@"cell_%d", indexPath.row]] autorelease];
+        cell = [[[UITableViewCell alloc]initWithStyle:UITableViewCellStyleDefault reuseIdentifier:[NSString stringWithFormat:@"cell_%d", [[[listdata objectAtIndex:indexPath.row] objectForKey:@"id"] intValue]]] autorelease];
         cell.backgroundView = nil;
         cell.contentView.backgroundColor = [UIColor clearColor];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
