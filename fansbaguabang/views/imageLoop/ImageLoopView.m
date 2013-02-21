@@ -13,7 +13,7 @@
 #import "MingXingViewController.h"
 
 @implementation ImageLoopView
-@synthesize httpRequest, listdata, scrollView, imageLength, highlightTitle, pagerIndicatorController;
+@synthesize httpRequest, listdata, scrollView, imageLength, highlightTitle, pagerIndicatorController, imageUrl;
 
 - (id)initWithFrame:(CGRect)frame andImageListURL: (NSString *)urlstring
 {
@@ -29,36 +29,9 @@
         scrollView.showsVerticalScrollIndicator = NO;
         scrollView.delegate = self;
         scrollView.delaysContentTouches = NO;
+        scrollView.backgroundColor = [UIColor blackColor];
         
-        NSURL *url  = [NSURL URLWithString:urlstring];
-        
-        ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
-        [request setDelegate:self];
-        self.httpRequest = request;
-        NSLog(@"ImageLoopView");
-        NSLog(@"http request: %@", urlstring);
-        [request startAsynchronous];
-    }
-    return self;
-}
-
-#pragma mark - ASIHttpRequest delegate methods
-
-- (void)requestFinished:(ASIHTTPRequest *)request
-{
-    NSString *responseString = [request responseString];
-    self.listdata = (NSArray *)[[responseString JSONValue] objectForKey:@"data"];
-    //imageLength = [listdata count];
-    
-    
-    if ([listdata count] > 0)
-    {
-//        UIViewController *controller = (UIViewController *)[self firstAvailableUIViewController];
-//        if ([controller isKindOfClass:[MainViewController class]])
-//        {
-//            [(MainViewController *)controller addLoopBar:[listdata count]];
-//        }
-        [self startShowImages];
+        [self addSubview:scrollView];
         
         UIImageView *titleBG = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"highlight_title_bg.png"]];
         titleBG.frame = CGRectMake(0, self.frame.size.height-30, 320, 30);
@@ -68,7 +41,7 @@
         title.font = [UIFont boldSystemFontOfSize:17];
         title.textColor = [UIColor whiteColor];
         title.backgroundColor = [UIColor clearColor];
-        title.text = [[listdata objectAtIndex:0] objectForKey:@"info_title"];
+        title.text = @"正在读取数据中，请稍后"; //[[listdata objectAtIndex:0] objectForKey:@"info_title"];
         [titleBG addSubview:title];
         self.highlightTitle = title;
         [title release];
@@ -87,26 +60,81 @@
         singleTapGesture.numberOfTapsRequired = 1;
         [scrollView addGestureRecognizer:singleTapGesture];
         [singleTapGesture release];
+        
+        turnPageTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scrollTime:) userInfo:nil repeats:YES];
+        restartTurnPageTimer = nil;
+        autoScrollWaitStage = YES;
+        
+        self.imageUrl = urlstring;
+        
+        NSURL *url  = [NSURL URLWithString:urlstring];
+        
+        ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:url];
+        [request setDelegate:self];
+        self.httpRequest = request;
+        NSLog(@"ImageLoopView");
+        NSLog(@"http request: %@", urlstring);
+        [request startAsynchronous];
+    }
+    return self;
+}
+
+- (void)reloadData
+{
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:imageUrl]];
+    [request setDelegate:self];
+    [request setCachePolicy:ASIDoNotReadFromCacheCachePolicy|ASIDoNotWriteToCacheCachePolicy];
+    self.httpRequest = request;
+    [request startAsynchronous];
+}
+
+#pragma mark - ASIHttpRequest delegate methods
+
+- (void)requestFinished:(ASIHTTPRequest *)request
+{
+    NSString *responseString = [request responseString];
+    self.listdata = (NSArray *)[[responseString JSONValue] objectForKey:@"data"];
+    //imageLength = [listdata count];
+    
+    
+    if ([listdata count] > 0)
+    {
+        //        UIViewController *controller = (UIViewController *)[self firstAvailableUIViewController];
+        //        if ([controller isKindOfClass:[MainViewController class]])
+        //        {
+        //            [(MainViewController *)controller addLoopBar:[listdata count]];
+        //        }
+        [self startShowImages];
+        highlightTitle.text = [[listdata objectAtIndex:0] objectForKey:@"info_title"];
+        [pagerIndicatorController setTotalPage:[listdata count]];
+        
     }
     
 }
 
 - (void)requestFailed:(ASIHTTPRequest *)request
 {
-//    NSError *error = [request error];
-//    NSLog(@"imageLoopView: %@", error);
-    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"无网络连接" message:@"请检查网络设置。" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
-    [alertView show];
+    NSError *error = [request error];
+    NSLog(@"imageLoopView: %@", error);
+    //    UIAlertView *alertView = [[UIAlertView alloc]initWithTitle:@"无网络连接" message:@"请检查网络设置。" delegate:self cancelButtonTitle:@"确定" otherButtonTitles: nil];
+    //    [alertView show];
 }
 
 - (void)startShowImages
 {
+    //首先清除所有历史数据
+    NSArray *items = [scrollView subviews];
+    for (UIView *view in items)
+    {
+        [view removeFromSuperview];
+    }
+    
     scrollView.contentSize = CGSizeMake(self.bounds.size.width * ([listdata count] + 2), self.bounds.size.height);
     
     NetImageView *netImageView;
     NSString *imgurl;
     int i=1;
-
+    
     for (NSDictionary *item in listdata)
     {
         imgurl = [NSString stringWithFormat:@"%@", [item objectForKey:@"info_headpicurl"]];
@@ -115,7 +143,7 @@
         netImageView.userInteractionEnabled = YES;
         //[netImageView setData:item];
         [netImageView getImageFromURL: imgurl];
-
+        
         [scrollView addSubview:netImageView];
         [netImageView release];
         i++;
@@ -143,43 +171,14 @@
     
     [scrollView setContentOffset:CGPointMake(self.bounds.size.width, 0) animated:NO];
     
-    [self addSubview:scrollView];
-    
-    turnPageTimer = [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(scrollTime:) userInfo:nil repeats:YES];
     restartTurnPageTimer = nil;
     autoScrollWaitStage = NO;
+    
+    
 }
 
 #pragma mark UIScrollView delegate methods
-- (void)scrollViewDidScroll:(UIScrollView *)_scrollView
-{
-    /*
-    
-    //[self changeLoopBar];
-    
-    int currentpage = (int)(scrollView.contentOffset.x / self.bounds.size.width);
-    
-    //UIPageControl *pageControl = (UIPageControl *)[self.view viewWithTag:2];
-    
-    int totalItemNumber = [listdata count];
-    
-    if (currentpage <1)
-    {
-        currentpage = totalItemNumber-1;
-        
-    }else if(currentpage>totalItemNumber)
-    {
-        currentpage = 0;
-    }else
-    {
-        currentpage = currentpage-1;
-    }
-    
-    NSLog(@"%d", currentpage);
-     
-     */
-    
-}
+
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)_scrollView
 {
@@ -226,30 +225,6 @@
     [self changeTitle];
 }
 
-//改变 MainViewController.m 中loopBar的显示
-//- (void)changeLoopBar:(BOOL)isAuto
-//{
-//    UIViewController *controller = (UIViewController *)[self firstAvailableUIViewController];
-//    if ([controller isKindOfClass:[MainViewController class]])
-//    {
-//        int totalItemNumber = [listdata count];
-//        int currentpage = [self getCurrentPage];
-//        if(isAuto)
-//        {
-//            if(currentpage >= totalItemNumber)
-//            {
-//                currentpage = 0;
-//            }
-//        }
-//        else 
-//        {
-//            currentpage -= 1;
-//            //NSLog(@"无: %i", currentpage);
-//        }
-//        
-//        [(MainViewController *)controller changeLoopBarShow:currentpage];
-//    }
-//}
 
 - (void)scrollTime:(id)sender
 {
@@ -302,54 +277,6 @@
     return currentpage;
 }
 
-- (void)highlightImageClicked: (id)sender
-{
-    
-    /*
-    // [self._delegate goto:175];
-    HighlightImageView *highlight = (HighlightImageView *)[sender object];
-    
-    NSLog(@"image clicked");
-    
-    if (highlight.referencetype == 2)
-    {
-        IPDetailViewController *ipdetail = [[IPDetailViewController alloc] initWithInterestPointID:[highlight.referencevalue intValue]];
-        [_delegate.navigationController pushViewController:ipdetail animated:YES];
-        [ipdetail release];
-        //[self._delegate goto:[highlight.referencevalue intValue]];
-        
-    }
-    else if (highlight.referencetype == 3)
-    {
-        //        
-        CommonIPListController *commoniplist = [[CommonIPListController alloc]initWithMainCatalogID:[highlight.referencevalue intValue]];
-        [_delegate.navigationController pushViewController:commoniplist animated:YES];
-        [commoniplist release];
-        //        [self._delegate goto:[highlight.referencevalue intValue]];
-        
-    }
-    else if (highlight.referencetype == 4)
-    {
-        CommonIPListController *commoniplist = [[CommonIPListController alloc]initWithSubCatalogID:[highlight.referencevalue intValue]];
-        [_delegate.navigationController pushViewController:commoniplist animated:YES];
-        [commoniplist release];
-        //        [self._delegate goto:[highlight.referencevalue intValue]];
-        
-    }
-    else if (highlight.referencetype == 1)
-    {
-        CommonIPListController *commoniplist = [[CommonIPListController alloc] initWithKeyword:highlight.referencevalue];
-        [_delegate.navigationController pushViewController:commoniplist animated:YES];
-        [commoniplist release];
-        //        [self._delegate goto:[highlight.referencevalue intValue]];
-        
-    }
-    //    IPDetailViewController *ipdetail = [[IPDetailViewController alloc]initWithInterestPointID:105];
-    //    [self.navigationController pushViewController:ipdetail animated:YES];
-    //    [ipdetail release];
-     
-     */
-}
 
 - (void)singleGesture: (id)sender
 {
@@ -371,64 +298,12 @@
     
     
     ArticleDetailViewController *detailcontroller = [[ArticleDetailViewController alloc]initWithURL:url andArticleID:articleid];
-    [controller.mainController.navigationController pushViewController:detailcontroller animated:YES];
+    [[(UIViewController *)controller.mainController navigationController] pushViewController:detailcontroller animated:YES];
     
     [detailcontroller release];
     
 }
 
-
--(void)didImageClicked:(id)sender
-{
-//    UIImageView *imageView = (UIImageView*)sender;
-//    NSLog(@"didImageClicked tag: %d", (imageView.tag - 800));
-//    NSDictionary *item = [listdata objectAtIndex:(imageView.tag - 800)];
-    
-//    int currentPage = [self getCurrentPage] - 1;
-//    NSLog(@"currentPage0: %d", currentPage);
-//    if (currentPage == [listdata count]) {
-//        currentPage = 0;
-//    } else if (currentPage == 1) {
-//        currentPage = [listdata count] - 1;
-//    }
-//    NSLog(@"currentPage1: %d", currentPage); 
-//    NSDictionary *item = [listdata objectAtIndex:currentPage];
-//    
-//    UIViewController *controller = [self firstAvailableUIViewController];
-//    
-//    if ([[item objectForKey:@"type"]intValue] == 0) {
-//        //文字公告
-//        AnnounceViewController *viewController = [[AnnounceViewController alloc]initWithData:item];
-//        [controller.navigationController pushViewController:viewController animated:YES];
-//        [viewController release];
-//    } else {
-//        //链接公告
-//        int type = [[item objectForKey:@"linktype"]intValue];
-//        int id = [[item objectForKey:@"linkid"]intValue];
-//        
-//        
-//        if (type == 0) { //电影
-//            CinemaDetailViewController *viewController = [[CinemaDetailViewController alloc]initWithCinemaID:id];
-//            [controller.navigationController pushViewController:viewController animated:YES];
-//            [viewController release];
-//        }
-//        if (type == 1) {
-//            MerchantDetailViewController *viewController = [[MerchantDetailViewController alloc]initWithMerchantID:id];
-//            [controller.navigationController pushViewController:viewController animated:YES];
-//            [viewController release];
-//        }
-//        if (type == 2) {
-//            FoodDetail1ViewController *viewController = [[FoodDetail1ViewController alloc]initWithFoodID:id];
-//            [controller.navigationController pushViewController:viewController animated:YES];
-//            [viewController release];
-//        }
-//        if (type == 3) {
-//            CouponDetailViewController *viewController = [[CouponDetailViewController alloc]initWithCouponID:id];
-//            [controller.navigationController pushViewController:viewController animated:YES];
-//            [viewController release];
-//        }
-//    }
-}
 
 - (void)dealloc
 {
@@ -437,6 +312,7 @@
     self.scrollView = nil;
     self.highlightTitle = nil;
     self.pagerIndicatorController = nil;
+    self.imageUrl = nil;
     
     [super dealloc];
 }

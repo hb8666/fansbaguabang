@@ -24,6 +24,8 @@
     UILabel *highlightTitle;
     
     PagerIndicatorViewController *pagerIndicatorController;
+    
+    NSString *imageUrl;
 }
 
 @property (nonatomic, retain) ASIHTTPRequest *httpRequest;
@@ -32,7 +34,9 @@
 @property (nonatomic, retain) UILabel *highlightTitle;
 @property (nonatomic, retain) PagerIndicatorViewController *pagerIndicatorController;
 @property (nonatomic) int imageLength;
+@property (nonatomic, retain)NSString *imageUrl;
 
 - (id)initWithFrame:(CGRect)frame andImageListURL: (NSString *)url;
 - (void)startShowImages;
+- (void)reloadData;
 @end

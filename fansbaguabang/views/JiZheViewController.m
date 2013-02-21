@@ -111,10 +111,7 @@
         [cell.contentView addSubview:weixin];
         
         [content release];
-        
-        
     }
-    
     return cell;
 }
 
@@ -123,17 +120,6 @@
     return;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
-- (void)dealloc
-{
-    self.mainTableView = nil;
-    self.listdata = nil;
-    [super dealloc];
-}
 
 @end

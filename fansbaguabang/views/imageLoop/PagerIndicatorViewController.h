@@ -18,5 +18,6 @@
 
 - (id)initWithPageNumber: (int)pagenumber;
 - (void)setPageNumber: (int)number;
+- (void)setTotalPage: (int)totalpage;
 
 @end

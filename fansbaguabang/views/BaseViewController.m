@@ -16,7 +16,7 @@
 @end
 
 @implementation BaseViewController
-@synthesize listdata, mainTableView, refreshHeaderView, lastRefreshTime, refreshFooterView;
+@synthesize listdata, mainTableView, refreshHeaderView, lastRefreshTime, refreshFooterView,mainController;
 
 - (id)init
 {
@@ -26,30 +26,11 @@
         currentPage = 1;
         totalPage = 1;
         isDataLoading = NO;
-        isLoop = NO;
+       
     }
     
     return self;
 }
-- (void)setMainController:(UIViewController *)controller
-{
-    mainController = controller;
-}
-
-- (UIViewController *)mainController
-{
-    return mainController;
-}
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        // Custom initialization
-    }
-    return self;
-}
-
 
 - (void)viewDidLoad
 {
@@ -65,12 +46,7 @@
     [self.view addSubview:tableView];
     self.mainTableView = tableView;
     
-    //推荐图
-    if (isLoop) {
-        ImageLoopView *loopView = [[ImageLoopView alloc]initWithFrame:CGRectMake(0, 0, 320, 158) andImageListURL:APIMAKER(API_URL_TUIJIAN)];
-        tableView.tableHeaderView = loopView;
-        [loopView release];
-    }
+   
            //列表刷新头
     if (refreshHeaderView == nil) {
 		

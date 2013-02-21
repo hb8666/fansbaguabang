@@ -28,17 +28,19 @@
     
     BOOL isDataLoading;
     int dataLoadingType;
-
-    BOOL isLoop;
+    
+    NSString *requrstUrl;
+    
 }
 @property (nonatomic, retain) NSArray *listdata;
 @property (nonatomic, retain) UITableView *mainTableView;
 @property (nonatomic, retain) EGORefreshTableHeaderView *refreshHeaderView;
 @property (nonatomic, retain) NSDate *lastRefreshTime;
 @property (nonatomic, retain) EGORefreshTableFooterView *refreshFooterView;
-
-- (void)setMainController: (UIViewController *)controller;
-- (UIViewController *)mainController;
+@property (nonatomic,retain) UIViewController *mainController;
 
 -(void)loadData;
+
+- (void)didRefreshButtonClicked: (id)sender;
+
 @end

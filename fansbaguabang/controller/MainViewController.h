@@ -25,8 +25,7 @@ typedef enum {
     MingXingViewController *mingxingController;
     YeJieViewController *yejieController;
     JiZheViewController *jizheController;
-    
-    int toolbarStatus;
+       int toolbarStatus;
     
 }
 

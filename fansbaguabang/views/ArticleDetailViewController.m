@@ -16,7 +16,7 @@
 @end
 
 @implementation ArticleDetailViewController
-@synthesize articleURL, shareViewController, httpRequest, articleContent, articlePic;
+@synthesize articleURL, shareViewController, httpRequest, articleContent, articlePic,countList,dingLabel,caiLabel;
 
 - (id)initWithURL: (NSString *)url andArticleID:(int)idnumber
 {
@@ -72,6 +72,7 @@
     
     [mainView release];
     
+    [self loadArticleCount];
     
     //底部toolbar
     UIImageView *toolbar = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"detail_bottomtoolbar_bg.png"]];
@@ -88,22 +89,43 @@
     
     
     //顶按钮
-    UIImageView *dingButton = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"detail_ding.png"]];
-    dingButton.frame = CGRectMake(158, 13, 14, 15);
+    UIButton *dingButton = [UIButton buttonWithType:UIButtonTypeCustom];
+  //  UIImageView *dingButton = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"detail_ding.png"]];
+    [dingButton setImage:[UIImage imageNamed:@"detail_ding.png"] forState:UIControlStateNormal];
+     dingButton.frame = CGRectMake(158, 13, 14, 15);
+    [dingButton addTarget:self action:@selector(dingButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:dingButton];
-    [dingButton release];
-    
+  //  [dingButton release];
+    dingLabel = [[UILabel alloc] init];
+    dingLabel.frame = CGRectMake(180, 13, 30, 15);
+    dingLabel.font = [UIFont systemFontOfSize:15];
+    dingLabel.text = @"0.0";
+    dingLabel.backgroundColor = [UIColor clearColor];
+    dingLabel.textColor = [UIColor grayColor];
+    [toolbar addSubview:dingLabel];
+    [dingLabel release];
     
     //踩按钮
-    UIImageView *caiButton = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"detail_cai.png"]];
+     UIButton *caiButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    [caiButton setImage:[UIImage imageNamed:@"detail_cai.png"] forState:UIControlStateNormal];
+ //   UIImageView *caiButton = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"detail_cai.png"]];
     caiButton.frame = CGRectMake(247, 11, 16, 17);
+    [caiButton addTarget:self action:@selector(caiButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:caiButton];
-    [caiButton release];
+ //   [caiButton release];
+    caiLabel = [[UILabel alloc] init];
+    caiLabel.frame = CGRectMake(270, 13, 30, 15);
+    caiLabel.font = [UIFont systemFontOfSize:15];
+    caiLabel.text = @"0.0";
+    caiLabel.backgroundColor = [UIColor clearColor];
+    caiLabel.textColor = [UIColor grayColor];
+    [toolbar addSubview:caiLabel];
+    
     
     [toolbar release];
     
     
-    [self loadArticleCount];
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -119,7 +141,8 @@
     self.httpRequest = nil;
     self.articlePic = nil;
     self.articleContent = nil;
-    
+    self.caiLabel = nil;
+    self.dingLabel = nil;
     [super dealloc];
 }
 
@@ -143,11 +166,12 @@
 - (void)loadArticleCount
 {
     NSString *urlstring = [NSString stringWithFormat:@"%@&id=%d", APIMAKER(API_URL_GETARTICLECOUNT), articleID];
-    
+    NSLog(@"loadPage:%@",urlstring);
     ASIHTTPRequest *request = [[[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlstring]] autorelease];
     request.delegate = self;
     request.tag = 2;
     [request startAsynchronous];
+    
 }
 
 #pragma mark - UIWebViewDelegate
@@ -185,6 +209,27 @@
     }
     
     [self.view addSubview:shareViewController.view];
+}
+
+-(void)dingButtonClicked:(id)sender
+{
+    NSLog(@"ding");
+    
+    NSString *urlstring = [NSString stringWithFormat:@"%@&id=%d", APIMAKER(API_URL_DING), articleID];
+    ASIHTTPRequest *request = [[[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlstring]] autorelease];
+    request.delegate = self;
+    request.tag = 3;
+    [request startAsynchronous];
+
+}
+
+-(void)caiButtonClicked:(id)sender
+{
+    NSString *urlstring = [NSString stringWithFormat:@"%@&id=%d", APIMAKER(API_URL_CAI), articleID];
+    ASIHTTPRequest *request = [[[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlstring]] autorelease];
+    request.delegate = self;
+    request.tag = 3;
+    [request startAsynchronous];
 }
 
 #pragma mark - Sina weibo block
@@ -377,15 +422,33 @@
     
 }
 
+-(void)setCountList:(NSArray *)countList
+{
+   
+    dingLabel.text = [NSString stringWithFormat:@"%@", [countList valueForKey:@"ding_counts"]];
+    caiLabel.text = [NSString stringWithFormat:@"%@", [countList valueForKey:@"cai_counts"]];
+}
+
 - (void)requestFinished:(ASIHTTPRequest *)request
 {
     if (request.tag == 2)
     {
         NSString *responseString = [request responseString];
-        NSLog(@"count: %@", responseString);
+        NSRange result = [responseString rangeOfString:@"false"];
         
+        if (result.location == NSNotFound) {
+            self.countList = (NSArray *)[responseString JSONValue];
+            NSLog(@"result:%@",responseString);
+        }
         
-        
+        return;
+    }else if (request.tag = 3)
+    {
+        NSString *responseString = [request responseString];
+        NSLog(@"是否成功: %@",responseString);
+       
+            [self loadArticleCount];
+    
         return;
     }
     

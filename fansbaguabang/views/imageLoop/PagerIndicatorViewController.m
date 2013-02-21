@@ -52,6 +52,14 @@
     // Dispose of any resources that can be recreated.
 }
 
+- (void)dealloc
+{
+    self.whitePoint = nil;
+    
+    [super dealloc];
+    
+}
+
 - (void)setPageNumber: (int)number
 {
     [UIView beginAnimations:@"MovePoint" context:nil];
@@ -63,12 +71,30 @@
     [UIView commitAnimations];
 }
 
-- (void)dealloc
+- (void)setTotalPage:(int)totalpage
 {
-    self.whitePoint = nil;
+    indicatorNumber = totalpage;
     
-    [super dealloc];
+    NSArray *items = [self.view subviews];
+    for (UIView *view in items)
+    {
+        if (![view isEqual:whitePoint])
+        {
+            [view removeFromSuperview];
+        }
+    }
     
+    for (int i=0; i< indicatorNumber; i++)
+    {
+        UIImageView *dot = [[UIImageView alloc]initWithImage:[UIImage imageNamed:@"pager_indicator_graydot.png"]];
+        dot.frame = CGRectMake(i * 12, 0, 6, 6);
+        [self.view addSubview:dot];
+        [dot release];
+    }
+    
+    [self setPageNumber:0];
 }
+
+
 
 @end

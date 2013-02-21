@@ -9,6 +9,7 @@
 #import "MainViewController.h"
 #import "AppDelegate.h"
 #import "ImageLoopView.h"
+#import "SetupViewController.h"
 
 @interface MainViewController ()
 
@@ -67,7 +68,7 @@
     [logo release];
     
     UILabel *channeltitle = [[UILabel alloc]initWithFrame:CGRectMake(96, 10, 100, 30)];
-    channeltitle.font = [UIFont systemFontOfSize:17];
+    channeltitle.font = [UIFont boldSystemFontOfSize:17];
     channeltitle.textColor = [UIColor whiteColor];
     channeltitle.backgroundColor = [UIColor clearColor];
     channeltitle.text = @"明星";
@@ -115,7 +116,7 @@
     
     
     UILabel *menu1 = [[UILabel alloc]initWithFrame:CGRectMake(0, 0, 70, 40)];
-    menu1.font = [UIFont systemFontOfSize:17];
+    menu1.font = [UIFont boldSystemFontOfSize:17];
     menu1.textColor = [UIColor whiteColor];
     menu1.backgroundColor = [UIColor clearColor];
     menu1.textAlignment = NSTextAlignmentCenter;
@@ -124,7 +125,7 @@
     [menu1 release];
     
     UILabel *menu2 = [[UILabel alloc]initWithFrame:CGRectMake(70, 0, 70, 40)];
-    menu2.font = [UIFont systemFontOfSize:17];
+    menu2.font = [UIFont boldSystemFontOfSize:17];
     menu2.textColor = [UIColor whiteColor];
     menu2.backgroundColor = [UIColor clearColor];
     menu2.textAlignment = NSTextAlignmentCenter;
@@ -133,7 +134,7 @@
     [menu2 release];
     
     UILabel *menu3 = [[UILabel alloc]initWithFrame:CGRectMake(140, 0, 70, 40)];
-    menu3.font = [UIFont systemFontOfSize:17];
+    menu3.font = [UIFont boldSystemFontOfSize:17];
     menu3.textColor = [UIColor whiteColor];
     menu3.backgroundColor = [UIColor clearColor];
     menu3.textAlignment = NSTextAlignmentCenter;
@@ -280,6 +281,9 @@
 - (void)setupButtonClicked: (id)sender
 {
     NSLog(@"setup button clicked");
+    SetupViewController *setupController = [[SetupViewController alloc] init];
+    [self.navigationController pushViewController:setupController animated:YES];
+   // [self presentViewController:setupController animated:YES completion:nil];
 }
 
 

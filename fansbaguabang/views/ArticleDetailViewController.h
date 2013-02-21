@@ -33,7 +33,8 @@ typedef enum
     UIImage *articlePic;
     
     SHARETYPE shareType;
-    
+        
+    NSArray *countList;
 }
 
 @property (retain, nonatomic) NSString *articleURL;
@@ -41,7 +42,11 @@ typedef enum
 @property (nonatomic, retain) ASIHTTPRequest *httpRequest;
 @property (nonatomic, retain) NSDictionary *articleContent;
 @property (nonatomic, retain) UIImage *articlePic;
+@property (nonatomic, retain) UILabel *dingLabel;
+@property (nonatomic, retain) UILabel *caiLabel;
+@property (nonatomic, retain) NSArray *countList;
 
+- (void)setCountList:(NSArray *)countList;
 - (id)initWithURL: (NSString *)url andArticleID: (int)idnumber;
 
 @end

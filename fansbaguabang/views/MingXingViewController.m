@@ -18,36 +18,38 @@
 
 @implementation MingXingViewController
 
+@synthesize imageLoopView;
 
 - (void)viewDidLoad
 {
-    isLoop = YES;
+   
     [super viewDidLoad];
 	// Do any additional setup after loading the view.
+    //推荐图
+    
+    ImageLoopView *loopView = [[ImageLoopView alloc]initWithFrame:CGRectMake(0, 0, 320, 158) andImageListURL:APIMAKER(API_URL_TUIJIAN)];
+    mainTableView.tableHeaderView = loopView;
+    self.imageLoopView = loopView;
+    [loopView release];
+
 }
 
 -(void)loadData
 {
-    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@&c=1&page=%d", APIMAKER(API_URL_LIST), currentPage]]];
-    [request setCachePolicy:ASIDoNotReadFromCacheCachePolicy|ASIDoNotWriteToCacheCachePolicy];
+    ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@&c=1&page=%d", APIMAKER(API_URL_LIST),currentPage]]];
     request.delegate = self;
     [request startAsynchronous];
 }
 
-#pragma mark - Memory Management Methods
-
-- (void)didReceiveMemoryWarning
+-(void)didRefreshButtonClicked:(id)sender
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super didRefreshButtonClicked:sender];
+    [imageLoopView reloadData];
 }
-
-- (void)dealloc
+-(void)dealloc
 {
-    
+    self.imageLoopView = nil;
     [super dealloc];
 }
-
-
 
 @end

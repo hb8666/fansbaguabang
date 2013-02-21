@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6D94A24516D47CFC00F022FF /* SetupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D94A24416D47CFC00F022FF /* SetupViewController.m */; };
+		6D94A25816D4D56700F022FF /* DCRoundSwitch.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D94A25116D4D56700F022FF /* DCRoundSwitch.m */; };
+		6D94A25916D4D56700F022FF /* DCRoundSwitchKnobLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D94A25316D4D56700F022FF /* DCRoundSwitchKnobLayer.m */; };
+		6D94A25A16D4D56700F022FF /* DCRoundSwitchOutlineLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D94A25516D4D56700F022FF /* DCRoundSwitchOutlineLayer.m */; };
+		6D94A25B16D4D56700F022FF /* DCRoundSwitchToggleLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D94A25716D4D56700F022FF /* DCRoundSwitchToggleLayer.m */; };
 		6DF7DBEF16D375D500447982 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DF7DBEE16D375D500447982 /* UIKit.framework */; };
 		6DF7DBF116D375D500447982 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DF7DBF016D375D500447982 /* Foundation.framework */; };
 		6DF7DBF316D375D500447982 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6DF7DBF216D375D500447982 /* CoreGraphics.framework */; };
@@ -113,6 +118,16 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6D94A24316D47CFC00F022FF /* SetupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetupViewController.h; sourceTree = "<group>"; };
+		6D94A24416D47CFC00F022FF /* SetupViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetupViewController.m; sourceTree = "<group>"; };
+		6D94A25016D4D56700F022FF /* DCRoundSwitch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCRoundSwitch.h; sourceTree = "<group>"; };
+		6D94A25116D4D56700F022FF /* DCRoundSwitch.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCRoundSwitch.m; sourceTree = "<group>"; };
+		6D94A25216D4D56700F022FF /* DCRoundSwitchKnobLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCRoundSwitchKnobLayer.h; sourceTree = "<group>"; };
+		6D94A25316D4D56700F022FF /* DCRoundSwitchKnobLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCRoundSwitchKnobLayer.m; sourceTree = "<group>"; };
+		6D94A25416D4D56700F022FF /* DCRoundSwitchOutlineLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCRoundSwitchOutlineLayer.h; sourceTree = "<group>"; };
+		6D94A25516D4D56700F022FF /* DCRoundSwitchOutlineLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCRoundSwitchOutlineLayer.m; sourceTree = "<group>"; };
+		6D94A25616D4D56700F022FF /* DCRoundSwitchToggleLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DCRoundSwitchToggleLayer.h; sourceTree = "<group>"; };
+		6D94A25716D4D56700F022FF /* DCRoundSwitchToggleLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DCRoundSwitchToggleLayer.m; sourceTree = "<group>"; };
 		6DF7DBEA16D375D500447982 /* fansbaguabang.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = fansbaguabang.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6DF7DBEE16D375D500447982 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		6DF7DBF016D375D500447982 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -290,6 +305,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6D94A24F16D4D56700F022FF /* DCRoundSwitch */ = {
+			isa = PBXGroup;
+			children = (
+				6D94A25016D4D56700F022FF /* DCRoundSwitch.h */,
+				6D94A25116D4D56700F022FF /* DCRoundSwitch.m */,
+				6D94A25216D4D56700F022FF /* DCRoundSwitchKnobLayer.h */,
+				6D94A25316D4D56700F022FF /* DCRoundSwitchKnobLayer.m */,
+				6D94A25416D4D56700F022FF /* DCRoundSwitchOutlineLayer.h */,
+				6D94A25516D4D56700F022FF /* DCRoundSwitchOutlineLayer.m */,
+				6D94A25616D4D56700F022FF /* DCRoundSwitchToggleLayer.h */,
+				6D94A25716D4D56700F022FF /* DCRoundSwitchToggleLayer.m */,
+			);
+			path = DCRoundSwitch;
+			sourceTree = "<group>";
+		};
 		6DF7DBDF16D375D400447982 = {
 			isa = PBXGroup;
 			children = (
@@ -356,6 +386,7 @@
 		6DF7DDF316D3770100447982 /* extlibs */ = {
 			isa = PBXGroup;
 			children = (
+				6D94A24F16D4D56700F022FF /* DCRoundSwitch */,
 				6DF7E08216D3841200447982 /* JSONKit */,
 				6DF7E07516D3839100447982 /* SinaWeibo */,
 				6DF7E02C16D3796100447982 /* NetImageView.h */,
@@ -525,13 +556,15 @@
 			children = (
 				6DF7E03416D3798500447982 /* ArticleDetailViewController.h */,
 				6DF7E03516D3798500447982 /* ArticleDetailViewController.m */,
+				6DF7E05316D37A1700447982 /* BaseViewController.h */,
+				6DF7E05416D37A1700447982 /* BaseViewController.m */,
 				6DF7E03616D3798500447982 /* imageLoop */,
 				6DF7E03D16D3798500447982 /* JiZheViewController.h */,
 				6DF7E03E16D3798500447982 /* JiZheViewController.m */,
-				6DF7E05316D37A1700447982 /* BaseViewController.h */,
-				6DF7E05416D37A1700447982 /* BaseViewController.m */,
 				6DF7E03F16D3798500447982 /* MingXingViewController.h */,
 				6DF7E04016D3798500447982 /* MingXingViewController.m */,
+				6D94A24316D47CFC00F022FF /* SetupViewController.h */,
+				6D94A24416D47CFC00F022FF /* SetupViewController.m */,
 				6DF7E04116D3798500447982 /* ShareViewController.h */,
 				6DF7E04216D3798500447982 /* ShareViewController.m */,
 				6DF7E04316D3798500447982 /* YeJieViewController.h */,
@@ -732,6 +765,11 @@
 				6DF7E08016D3839100447982 /* SinaWeiboAuthorizeView.m in Sources */,
 				6DF7E08116D3839100447982 /* SinaWeiboRequest.m in Sources */,
 				6DF7E08516D3841200447982 /* JSONKit.m in Sources */,
+				6D94A24516D47CFC00F022FF /* SetupViewController.m in Sources */,
+				6D94A25816D4D56700F022FF /* DCRoundSwitch.m in Sources */,
+				6D94A25916D4D56700F022FF /* DCRoundSwitchKnobLayer.m in Sources */,
+				6D94A25A16D4D56700F022FF /* DCRoundSwitchOutlineLayer.m in Sources */,
+				6D94A25B16D4D56700F022FF /* DCRoundSwitchToggleLayer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -852,6 +890,7 @@
 				6DF7DC0A16D375D500447982 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
