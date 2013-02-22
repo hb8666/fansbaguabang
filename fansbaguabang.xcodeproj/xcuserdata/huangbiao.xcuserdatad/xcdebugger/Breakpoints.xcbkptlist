@@ -2,4 +2,19 @@
 <Bucket
    type = "1"
    version = "1.0">
+   <FileBreakpoints>
+      <FileBreakpoint
+         shouldBeEnabled = "Yes"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "fansbaguabang/views/imageLoop/UIView+FindUIViewController.m"
+         timestampString = "383216147.82253"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "11"
+         endingLineNumber = "11"
+         landmarkName = "@implementation UIView(FindUIViewController)"
+         landmarkType = "3">
+      </FileBreakpoint>
+   </FileBreakpoints>
 </Bucket>

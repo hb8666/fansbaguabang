@@ -99,7 +99,7 @@
     dingLabel = [[UILabel alloc] init];
     dingLabel.frame = CGRectMake(180, 13, 30, 15);
     dingLabel.font = [UIFont systemFontOfSize:15];
-    dingLabel.text = @"0.0";
+    dingLabel.text = @"0";
     dingLabel.backgroundColor = [UIColor clearColor];
     dingLabel.textColor = [UIColor grayColor];
     [toolbar addSubview:dingLabel];
@@ -116,7 +116,7 @@
     caiLabel = [[UILabel alloc] init];
     caiLabel.frame = CGRectMake(270, 13, 30, 15);
     caiLabel.font = [UIFont systemFontOfSize:15];
-    caiLabel.text = @"0.0";
+    caiLabel.text = @"0";
     caiLabel.backgroundColor = [UIColor clearColor];
     caiLabel.textColor = [UIColor grayColor];
     [toolbar addSubview:caiLabel];
@@ -167,11 +167,14 @@
 {
     NSString *urlstring = [NSString stringWithFormat:@"%@&id=%d", APIMAKER(API_URL_GETARTICLECOUNT), articleID];
     NSLog(@"loadPage:%@",urlstring);
-    ASIHTTPRequest *request = [[[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlstring]] autorelease];
+    
+    ASIHTTPRequest *request = [[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlstring]];
     request.delegate = self;
     request.tag = 2;
+    [request setCachePolicy:ASIDoNotReadFromCacheCachePolicy|ASIDoNotWriteToCacheCachePolicy];
     [request startAsynchronous];
     
+    [request release];
 }
 
 #pragma mark - UIWebViewDelegate
@@ -211,25 +214,33 @@
     [self.view addSubview:shareViewController.view];
 }
 
+
 -(void)dingButtonClicked:(id)sender
 {
-    NSLog(@"ding");
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
     
-    NSString *urlstring = [NSString stringWithFormat:@"%@&id=%d", APIMAKER(API_URL_DING), articleID];
-    ASIHTTPRequest *request = [[[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlstring]] autorelease];
-    request.delegate = self;
-    request.tag = 3;
-    [request startAsynchronous];
-
+    if(!delegate.isDing){
+        NSString *urlstring = [NSString stringWithFormat:@"%@&id=%d", APIMAKER(API_URL_DING), articleID];
+        ASIHTTPRequest *request = [[[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlstring]] autorelease];
+        request.delegate = self;
+        request.tag = 3;
+        [request startAsynchronous];
+    }
+    delegate.isDing = YES;
 }
 
 -(void)caiButtonClicked:(id)sender
 {
-    NSString *urlstring = [NSString stringWithFormat:@"%@&id=%d", APIMAKER(API_URL_CAI), articleID];
-    ASIHTTPRequest *request = [[[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlstring]] autorelease];
-    request.delegate = self;
-    request.tag = 3;
-    [request startAsynchronous];
+    AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    if(!delegate.isCai){
+        NSString *urlstring = [NSString stringWithFormat:@"%@&id=%d", APIMAKER(API_URL_CAI), articleID];
+        ASIHTTPRequest *request = [[[ASIHTTPRequest alloc]initWithURL:[NSURL URLWithString:urlstring]] autorelease];
+        request.delegate = self;
+        request.tag = 3;
+        [request startAsynchronous];
+    }
+    delegate.isCai = YES;
 }
 
 #pragma mark - Sina weibo block
@@ -422,11 +433,11 @@
     
 }
 
--(void)setCountList:(NSArray *)countList
+-(void)setCountList:(NSArray *)countLists
 {
    
-    dingLabel.text = [NSString stringWithFormat:@"%@", [countList valueForKey:@"ding_counts"]];
-    caiLabel.text = [NSString stringWithFormat:@"%@", [countList valueForKey:@"cai_counts"]];
+    dingLabel.text = [NSString stringWithFormat:@"%@", [countLists valueForKey:@"ding_counts"]];
+    caiLabel.text = [NSString stringWithFormat:@"%@", [countLists valueForKey:@"cai_counts"]];
 }
 
 - (void)requestFinished:(ASIHTTPRequest *)request
@@ -439,16 +450,16 @@
         if (result.location == NSNotFound) {
             self.countList = (NSArray *)[responseString JSONValue];
             NSLog(@"result:%@",responseString);
+        }else{
+            NSLog(@"顶踩获取数据错误");
         }
         
         return;
-    }else if (request.tag = 3)
+    }else if (request.tag == 3)
     {
         NSString *responseString = [request responseString];
         NSLog(@"是否成功: %@",responseString);
-       
-            [self loadArticleCount];
-    
+        [self loadArticleCount];
         return;
     }
     

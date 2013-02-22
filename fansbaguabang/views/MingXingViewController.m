@@ -38,6 +38,7 @@
 {
     ASIHTTPRequest *request = [ASIHTTPRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@&c=1&page=%d", APIMAKER(API_URL_LIST),currentPage]]];
     request.delegate = self;
+    [request setCachePolicy:ASIDoNotReadFromCacheCachePolicy|ASIDoNotWriteToCacheCachePolicy];
     [request startAsynchronous];
 }
 

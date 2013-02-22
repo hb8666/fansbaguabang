@@ -13,9 +13,12 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate,SinaWeiboDelegate, WXApiDelegate>
 {
     SinaWeibo *sinaweibo;
+    BOOL isDing;
+    BOOL isCai;
 }
 
 @property (strong, nonatomic) UIWindow *window;
 @property (nonatomic, retain) SinaWeibo *sinaweibo;
-
+@property (nonatomic)BOOL isDing;
+@property (nonatomic)BOOL isCai;
 @end

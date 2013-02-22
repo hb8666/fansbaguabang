@@ -144,7 +144,7 @@
     
     UIButton *setupButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [setupButton setImage:[UIImage imageNamed:@"setupbutton.png"] forState:UIControlStateNormal];
-    setupButton.frame = CGRectMake(280, 0, 40, 40);
+    setupButton.frame = CGRectMake(265, 0, 40, 40);
     [setupButton addTarget:self action:@selector(setupButtonClicked:) forControlEvents:UIControlEventTouchUpInside];
     [toolbar addSubview:setupButton];
     

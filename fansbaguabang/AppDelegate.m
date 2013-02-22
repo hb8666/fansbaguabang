@@ -12,14 +12,22 @@
 #import "MainViewController.h"
 
 @implementation AppDelegate
-@synthesize sinaweibo;
+@synthesize sinaweibo,isCai,isDing;
 - (void)dealloc
 {
     self.sinaweibo = nil;
     [_window release];
     [super dealloc];
 }
-
+- (id)init
+{
+    self = [super init];
+    if (self) {
+        isCai = NO;
+        isDing = NO;
+    }
+    return self;
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     //create a uuid if users not have
